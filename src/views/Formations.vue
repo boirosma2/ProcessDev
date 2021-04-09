@@ -62,9 +62,9 @@
           <v-card-subtitle>
             <div
               :key="(key+index)"
-              v-for="(value,key,index) in $_.omit(formation,'pk','Description code tarifaire') "
+              v-for="(value,key,index) in $_.omit(formation,'pk') "
             >
-              <span v-if="(value!=='')"><strong>{{key}}:</strong>  {{value}}</span>
+              <span v-if="(value!=='')"><strong>{{key}}:</strong> : {{value}}</span>
             </div>
           </v-card-subtitle>
           <v-card-actions

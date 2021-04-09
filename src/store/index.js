@@ -35,24 +35,23 @@ export default new Vuex.Store({
           '{{Objectifs}}': `Elements des fiches de formation.Objectif.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
           '{{Déroulement / plan de travail}}': `Elements des fiches de formation.Déroulement / plan de travail.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
           '{{Support de formation}}': `Elements des fiches de formation.Support de formation.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
-          '{{Public visé}}': `Elements des fiches de formation.Public visé.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
+          '{{Public viséxxx}}': `Elements des fiches de formation.Public visé.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
           '{{Pré-requis stagiaire référent}}': `Elements des fiches de formation.Pré-requis stagiaire référent.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
           '{{Pré-requis formateur référent}}': `Elements des fiches de formation.Pré-requis formateur référent.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
           '{{Actions habituelles}}': `Elements des fiches de formation.Actions habituelles.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
-          '{{Hors formation}}': `Elements des fiches de formation.Hors formation.["Numero sequentiel","Description de l'element", "Etat de l'element"]`
+          '{{Hors formation}}': `Elements des fiches de formation.Hors formation.["Numero sequentiel","Description de l'element", "Etat de l'element"]`,
+          '{{CR Intervention}}': `Elements des fiches de formation.CR Intervention.["Numero sequentiel","Description de l'element", "Etat de l'element"]`
         },
         mapping: {
           nameSheetFicheFormation: 'Fiches de formations',
-          nameSheetPFA: 'Codes Tarifaires',
           nameSheetDetailsFormation: 'Elements des fiches de formation',
           nameColumnJoinWithSheetDetailsFormation: 'Code de fiche de formation',
           nameColumnGroupByDetailFormation: 'Categorie d\'element',
-          labelCodeTarifaire: { sheet: 'Codes Tarifaires', columns: ['Code tarifaire', 'Description code tarifaire'] },
-          columnsToComplete: { sheet: 'Fiches de formations', columns: ['Version', 'Code tarifaire', 'Description code tarifaire', 'Code de fiche de formation'] },
+          columnsToComplete: { sheet: 'Fiches de formations', columns: ['Version', 'Code tarifaire', 'Code de fiche de formation'] },
           labelFicheFormation: { sheet: 'Fiches de formations', column: 'Libelle de fiche de formation' }
         },
         detailFormationMapping: {
-          hideColumns: ['Version', 'Code tarifaire', 'Description code tarifaire', 'Code de fiche de formation', "Categorie d'element"],
+          hideColumns: ['Version', 'Code tarifaire', 'Code de fiche de formation', "Categorie d'element"],
           buttonsSelect: {
             "Etat de l'element": [
               { value: 'AF', label: 'A Faire' },

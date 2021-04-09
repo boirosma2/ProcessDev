@@ -17,7 +17,7 @@
       color="primary"
       @click="$router.go(-1)"
     >
-      Retour au formations
+      <v-icon>mdi-chevron-left</v-icon> Retour au formations
     </v-btn>
     <v-row
       align="center"
