@@ -202,6 +202,7 @@
                   required
                 >
                 </v-textarea>
+                <input type="file" id="file" ref="myFiles" class="custom-file-input" @change="previewFiles" multiple>
               </v-col>
             </v-row>
           </v-form>
@@ -232,6 +233,7 @@ import PdfGenerator from '@/customClasses/pdfGenerator'
 export default {
   data: () => ({
     error: null,
+    files: [],
     alert: {
       show: false,
       message: '',
@@ -337,6 +339,9 @@ export default {
       })
       return result
     },
+    previewFiles () {
+      this.files = this.$refs.myFiles.files
+    },
     sendByEmail () {
       if (this.selectedFormations.length > 0) {
         if (this.existValidMail()) {
@@ -351,12 +356,29 @@ export default {
                 let objet = formation[this.currentMapping.labelFicheFormation.sheet][0][0][this.currentMapping.labelFicheFormation.column] + ' | ' + this.subject
                 const pdfgen = new PdfGenerator(this.$gapi, this.currentGdocsTemplate, this.currentTemplate, formation, `${value}.pdf`, 'email', [{ adress: mail, message: this.body, objet: objet }])
                 promises.push(pdfgen.generatePdf())
+                this.files.forEach(value => {
+                  const pdf2base64 = require('pdf-to-base64')
+                  pdf2base64('../../example.pdf')
+                    .then(
+                      (response) => {
+                        console.log(response)
+                        this.$gapi.gmail.sendEmail(mail, objet, this.body, response)
+                      }
+                    )
+                    .catch(
+                      (error) => {
+                        console.log(error)
+                      }
+                    )
+                })
               }
             })
           })
+          this.check = []
+          this.selectedFormations = []
           Promise.all(promises).then(
             () => {
-              this.alert.message = 'Mails envoyés'
+              this.alert.message = 'Mails envoyÃ©s'
               this.alert.show = true
               this.alert.type = 'success'
               this.loading = false
