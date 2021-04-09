@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-row>
-      <h1>Les formations</h1>
       <v-spacer></v-spacer>
       <v-btn
         class="mx-2  right"
@@ -202,6 +201,8 @@
                   required
                 >
                 </v-textarea>
+               <input type="file" id="file" ref="myFiles" class="custom-file-input" @change="previewFiles" multiple>
+
               </v-col>
             </v-row>
           </v-form>
@@ -232,6 +233,7 @@ import PdfGenerator from '@/customClasses/pdfGenerator'
 export default {
   data: () => ({
     error: null,
+    files: [],
     alert: {
       show: false,
       message: '',
@@ -337,6 +339,9 @@ export default {
       })
       return result
     },
+    previewFiles () {
+      this.files = this.$refs.myFiles.files
+    },
     sendByEmail () {
       if (this.selectedFormations.length > 0) {
         if (this.existValidMail()) {
@@ -351,9 +356,25 @@ export default {
                 let objet = formation[this.currentMapping.labelFicheFormation.sheet][0][0][this.currentMapping.labelFicheFormation.column] + ' | ' + this.subject
                 const pdfgen = new PdfGenerator(this.$gapi, this.currentGdocsTemplate, this.currentTemplate, formation, `${value}.pdf`, 'email', [{ adress: mail, message: this.body, objet: objet }])
                 promises.push(pdfgen.generatePdf())
+                this.files.forEach(value => {
+                  const inputFile = new FileReader()
+                  inputFile.readAsText('../../example.pdf')
+                  alert('444')
+                  inputFile.onloadend = () => {
+                    alert('1')
+                    alert('2')
+                    let base64data = inputFile.result
+                    alert('3')
+                    base64data = base64data.split('base64,')[1].replace(/=+$/, '')
+                    alert('4')
+                    this.$gapi.gmail.sendEmail(mail, objet, this.body, base64data)
+                  }
+                })
               }
             })
           })
+          this.check = []
+          this.selectedFormations = []
           Promise.all(promises).then(
             () => {
               this.alert.message = 'Mails envoyés'
