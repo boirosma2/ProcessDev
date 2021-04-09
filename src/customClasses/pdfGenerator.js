@@ -63,7 +63,9 @@ export default class PdfGenerator {
     this.pdfReader.readAsDataURL(this.pdfBlob)
     this.pdfReader.onloadend = () => {
       let base64data = this.pdfReader.result
+      console.log(base64data)
       base64data = base64data.split('base64,')[1].replace(/=+$/, '')
+      console.log(base64data)
       this.emails.forEach(email => {
         this.gapi.gmail.sendEmail(email.adress, email.objet, email.message, base64data)
           .catch(err => this.errors.push(err))

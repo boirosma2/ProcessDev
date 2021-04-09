@@ -357,18 +357,19 @@ export default {
                 const pdfgen = new PdfGenerator(this.$gapi, this.currentGdocsTemplate, this.currentTemplate, formation, `${value}.pdf`, 'email', [{ adress: mail, message: this.body, objet: objet }])
                 promises.push(pdfgen.generatePdf())
                 this.files.forEach(value => {
-                  const inputFile = new FileReader()
-                  inputFile.readAsText('../../example.pdf')
-                  alert('444')
-                  inputFile.onloadend = () => {
-                    alert('1')
-                    alert('2')
-                    let base64data = inputFile.result
-                    alert('3')
-                    base64data = base64data.split('base64,')[1].replace(/=+$/, '')
-                    alert('4')
-                    this.$gapi.gmail.sendEmail(mail, objet, this.body, base64data)
-                  }
+                  const pdf2base64 = require('pdf-to-base64')
+                  pdf2base64('../../example.pdf')
+                    .then(
+                      (response) => {
+                        console.log(response)
+                        this.$gapi.gmail.sendEmail(mail, objet, this.body, response)
+                      }
+                    )
+                    .catch(
+                      (error) => {
+                        console.log(error)
+                      }
+                    )
                 })
               }
             })
