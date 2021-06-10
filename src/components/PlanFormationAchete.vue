@@ -1,14 +1,7 @@
 <template>
   <div @mouseover="checkAllFormations">
-    <v-btn
-          color="green"
-          text
-          @click="checkAllFormations"
-        >
-        aaaaa
-    </v-btn>
+    <h1> Liste des codes tarifaires </h1> <br/>
     <v-row class="bottom-space">
-         <h1> Liste des codes tarifaires </h1>
       <v-col
         cols="12"
         xs="12"
