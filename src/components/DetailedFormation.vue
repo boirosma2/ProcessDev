@@ -19,6 +19,13 @@
     >
       <v-icon>mdi-chevron-left</v-icon> Retour au formations
     </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn
+      color="blue darken-2 white--text"
+      @click="temp = !temp"
+    >
+      changer de theme
+    </v-btn>
     <v-row
       align="center"
       class="ma-2"
@@ -34,109 +41,115 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-row>
-
-  <v-card
-    class="mx-auto"
-    max-width="2500"
-    v-for="(feuille,keyFeuille,indexFeuille) in formationItem"
-    :key="`${keyFeuille+indexFeuille}-feuille`"
-  >
-    <v-card-title
+  <div v-if="temp">
+    <v-card
+      class="mx-auto"
+      max-width="2500"
+      v-for="(feuille,keyFeuille,indexFeuille) in formationItem"
+      :key="`${keyFeuille+indexFeuille}-feuille`"
       >
-      {{keyValues}}
-    </v-card-title>
-    <div
-      :key="`${keyFeuille+keyValues+indexValues}-values`"
-      v-for="(values,keyValues,indexValues) in feuille">
-      <v-card-actions>
-        <v-btn
-          color="orange lighten-2"
-          text
-          @click="show = !show"
+      <v-card-title
         >
-          {{keyValues}}
-        </v-btn>
+        {{keyFeuille}}
+      </v-card-title>
+      <div
+        :key="`${keyFeuille+keyValues+indexValues}-values`"
+        v-for="(values,keyValues,indexValues) in feuille">
+        <v-card-actions>
+          <v-btn
+            color="orange lighten-2"
+            text
+            @click="lastItem = indexValues"
+          >
+          <div v-if="keyValues == 0">
+            Informations
+          </div>
+          <div v-else>
+            {{keyValues}}
+          </div>
+          </v-btn>
 
-        <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
 
-        <v-btn
-          icon
-          @click="show = !show"
-        >
-          <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-        </v-btn>
-      </v-card-actions>
-      <v-expand-transition>
-        <div v-show="show">
-          <v-divider></v-divider>
-         <v-row row="12">
-                  <v-col
-                    :key="`${keyFeuille+keyValues+keyLine+indexLine}-line`"
-                    v-for="(line,keyLine,indexLine) in values"
-                    cols="12"
-                  >
-                    <v-card>
-                      <v-container fluid>
+          <v-btn
+            icon
+            @click="lastItem = indexValues"
+          >
+            <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+          </v-btn>
+        </v-card-actions>
+        <v-expand-transition >
+          <div v-show="lastItem == indexValues">
+            <v-divider></v-divider>
+          <v-row row="12">
+                    <v-col
+                      :key="`${keyFeuille+keyValues+keyLine+indexLine}-line`"
+                      v-for="(line,keyLine,indexLine) in values"
+                      cols="12"
+                    >
+                      <v-card>
+                        <v-container fluid>
 
-                        <div class="text-right">
-                          <v-btn
-                            v-if="isNaN(keyValues)"
-                            color="red darken-1 white--text"
-                            fab
-                            small
-                            class="mb-3"
-                            @click="prepareDeleteLine(keyFeuille,line)"
-                          >
-                            <v-icon>mdi-delete</v-icon>
-                          </v-btn>
-                        </div>
-
-                        <v-row
-                          dense
-                          row="12"
-                        >
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            lg="4"
-                            md="6"
-                            :key="`${keyFeuille+keyValues+keyLine+keytext+indexText}-line`"
-                            v-for="(text,keytext,indexText) in $_.omit(line,'pk')"
-                            ma-2
-                            v-show="!detailFormationMapping.hideColumns.includes(keytext)"
-                          >
-                            <v-text-field
-                              v-if="!detailFormationMapping.buttonsSelect.hasOwnProperty(keytext)"
-                              :label="keytext"
-                              :value="text"
-                              v-model="formationItem[keyFeuille][keyValues][keyLine][keytext]"
-                              outlined
-                              @keydown="isEdited=true"
-                              :hide-details="true"
+                          <div class="text-right">
+                            <v-btn
+                              v-if="isNaN(keyValues)"
+                              color="red darken-1 white--text"
+                              fab
+                              small
+                              class="mb-3"
+                              @click="prepareDeleteLine(keyFeuille,line)"
                             >
-                            </v-text-field>
-                            <v-select
-                              v-else
-                              :items="detailFormationMapping.buttonsSelect[keytext]"
-                              item-text="label"
-                              item-value="value"
-                              v-model="formationItem[keyFeuille][keyValues][keyLine][keytext]"
-                              outlined
-                              :label="keytext"
-                              @change="isEdited=true"
-                              :hide-details="true"
-                            ></v-select>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                  </v-col>
-                </v-row>
-        </div>
-      </v-expand-transition>
-    </div>
-  </v-card>
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </div>
 
+                          <v-row
+                            dense
+                            row="12"
+                          >
+                            <v-col
+                              cols="12"
+                              sm="12"
+                              lg="4"
+                              md="6"
+                              :key="`${keyFeuille+keyValues+keyLine+keytext+indexText}-line`"
+                              v-for="(text,keytext,indexText) in $_.omit(line,'pk')"
+                              ma-2
+                              v-show="!detailFormationMapping.hideColumns.includes(keytext)"
+                            >
+                              <v-text-field
+                                v-if="!detailFormationMapping.buttonsSelect.hasOwnProperty(keytext)"
+                                :label="keytext"
+                                :value="text"
+                                v-model="formationItem[keyFeuille][keyValues][keyLine][keytext]"
+                                outlined
+                                @keydown="isEdited=true"
+                                :hide-details="true"
+                              >
+                              </v-text-field>
+                              <v-select
+                                v-else
+                                :items="detailFormationMapping.buttonsSelect[keytext]"
+                                item-text="label"
+                                item-value="value"
+                                v-model="formationItem[keyFeuille][keyValues][keyLine][keytext]"
+                                outlined
+                                :label="keytext"
+                                @change="isEdited=true"
+                                :hide-details="true"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+          </div>
+        </v-expand-transition>
+      </div>
+    </v-card>
+  </div>
+  <div v-else>
     <v-row dense>
       <v-col
         cols="12"
@@ -227,6 +240,7 @@
         </v-row>
       </v-col>
     </v-row>
+  </div>
     <v-snackbar
       :value="isEdited && !loading"
       vertical
@@ -357,6 +371,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data: () => ({
     show: false,
+    temp: true,
+    lastItem: 0,
+    steps: [true, false, false, false, false, false, false, false, false, false, false, false, false],
     actionText: 'Des modifications ont été apportées, Que souhaitez-vous faire ? ',
     minimizeAction: false,
     loading: false,
@@ -442,6 +459,12 @@ export default {
       this.deleteKeyFeuille = keyFeuille
       this.deleteLine = line
       this.confirmDeleteDialog = true
+    },
+    ShowElement (i) {
+      this.steps[i] = !this.steps[i]
+    },
+    getShow (i) {
+      return this.steps[i]
     },
     abortDeleteLine () {
       this.confirmDeleteDialog = false
