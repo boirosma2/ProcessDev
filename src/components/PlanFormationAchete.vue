@@ -17,13 +17,13 @@
         <v-card-subtitle>
           <div
             :key="key + index"
-            v-for="(value, key, index) in $_.omit(formation, 'pk', 'Version', 'Description de fiche de formation', 'Duree', 'Code de fiche de formation','Libelle de fiche de formation')"
+            v-for="(value, key, index) in $_.omit(formation, 'pk', 'Version', 'Description de fiche de formation', 'Duree', 'Code de fiche de formation')"
           >
             <span v-if="value!=='' && key=='Code tarifaire'"
               ><strong>{{ key }}:</strong> {{ value }}
             </span>
 
-            <span v-if="value!=='' && key=='Description code tarifaire'"
+            <span v-if="value!=='' && key=='Libelle de fiche de formation'"
               ><strong>Description:</strong> {{ value }}
             </span>
           </div>
