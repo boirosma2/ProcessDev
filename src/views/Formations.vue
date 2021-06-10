@@ -106,7 +106,7 @@
         <v-btn
           color="yellow"
           text
-          @click="showMailDialog=true"
+          @click="PreGenerationMail"
         >
           Envoyer par mail
         </v-btn>
@@ -244,7 +244,7 @@ export default {
     actionText: 'Que souhaitez-vous faire ?',
     minimizeAction: false,
     subject: '',
-    body: '',
+    body: 'qsdqsdqs',
     showMailDialog: false,
     chipsMail: [],
     selectedFormations: []
@@ -342,6 +342,15 @@ export default {
     previewFiles () {
       this.files = this.$refs.myFiles.files
     },
+    PreGenerationMail () {
+      this.showMailDialog = true
+      this.selectedFormations.forEach(value => {
+        const formation = this.currentFormation(value)
+        let objet = formation[this.currentMapping.labelFicheFormation.sheet][0][0][this.currentMapping.labelFicheFormation.column]
+        this.subject = 'Formation : ' + objet
+        this.body = 'Bonjour, \n\nVous trouverez ci-joint le plan de la formation " ' + objet + ' "\n\nPour plus d\'informations, n\'hésitez pas à contacter notre équipe'
+      })
+    },
     sendByEmail () {
       if (this.selectedFormations.length > 0) {
         if (this.existValidMail()) {
@@ -353,8 +362,7 @@ export default {
             this.chipsMail.forEach(mail => {
               // eslint-disable-next-line
               if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-                let objet = formation[this.currentMapping.labelFicheFormation.sheet][0][0][this.currentMapping.labelFicheFormation.column] + ' | ' + this.subject
-                const pdfgen = new PdfGenerator(this.$gapi, this.currentGdocsTemplate, this.currentTemplate, formation, `${value}.pdf`, 'email', [{ adress: mail, message: this.body, objet: objet }])
+                const pdfgen = new PdfGenerator(this.$gapi, this.currentGdocsTemplate, this.currentTemplate, formation, `${value}.pdf`, 'email', [{ adress: mail, message: this.body, objet: this.subject }])
                 promises.push(pdfgen.generatePdf())
                 this.files.forEach(value => {
                   const pdf2base64 = require('pdf-to-base64')
@@ -362,7 +370,7 @@ export default {
                     .then(
                       (response) => {
                         console.log(response)
-                        this.$gapi.gmail.sendEmail(mail, objet, this.body, response)
+                        this.$gapi.gmail.sendEmail(mail, this.subject, this.body, response)
                       }
                     )
                     .catch(
